@@ -7,9 +7,9 @@ feature_image: "/assets/cam2_anno.png"
 excerpt: "Alembic is a starting point for [Jekyll](https://jekyllrb.com/) projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately. Install it, configure it, tweak it, push it."
 ---
 
-SOMPT22 is a Multi-Object Tracking Dataset [SOMOT22](https://github.com/sompt22) projects.
+SOMPT22 is a Multi-Object Tracking Dataset [SOMPT22](https://github.com/sompt22)
 
-{% include button.html text="Fork it" icon="github" link="https://github.com/youonlytrackonce" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %}
+{% include button.html text="Fork it" icon="github" link="https://github.com/sompt22" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %}
 
 
 ## Abstract
