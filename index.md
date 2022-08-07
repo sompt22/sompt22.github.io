@@ -9,14 +9,14 @@ excerpt: "Alembic is a starting point for [Jekyll](https://jekyllrb.com/) projec
 
 SOMPT22 is a Multi-Object Tracking Dataset. 
 
-[Fatih Emre Simsek](https://orcid.org/0000-0003-3362-5747 "Fatih Emre Simsek") [Cevahir Cigla](https://orcid.org/0000-0003-3246-3176 "Cevahir Cigla") [Koray Kayabol](https://orcid.org/0000-0003-0053-2800 "Koray Kayabol")
+[Fatih Emre Simsek](https://orcid.org/0000-0003-3362-5747 "Fatih Emre Simsek")<sup>1,2</sup> [Cevahir Cigla](https://orcid.org/0000-0003-3246-3176 "Cevahir Cigla")<sup>1</sup> [Koray Kayabol](https://orcid.org/0000-0003-0053-2800 "Koray Kayabol")<sup>2</sup>
 
-
+<sup>1</sup>Aselsan Inc. <sup>2</sup>Gebze Technical University
 
 {% include figure.html image="/assets/paper_pics/tumbnail.png" width="1920" height="1000" %}
 
 
-{% include button.html text="Fork it" icon="github" link="https://github.com/sompt" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %} {% include button.html text="Paper" icon="link" link="https://arxiv.org/abs/2208.02580" color="#0d94e7" %}
+{% include button.html text="Fork it" icon="github" link="https://github.com/sompt22" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %} {% include button.html text="Paper" icon="link" link="https://arxiv.org/abs/2208.02580" color="#0d94e7" %}
 
 
 ## Abstract
