@@ -7,7 +7,14 @@ feature_image: "/assets/cam2_anno.png"
 excerpt: "Alembic is a starting point for [Jekyll](https://jekyllrb.com/) projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately. Install it, configure it, tweak it, push it."
 ---
 
-SOMPT22 is a Multi-Object Tracking Dataset [SOMPT22](https://github.com/sompt22).
+SOMPT22 is a Multi-Object Tracking Dataset. 
+
+[Fatih Emre Simsek](https://orcid.org/0000-0003-3362-5747 "Fatih Emre Simsek") [Cevahir Cigla](https://orcid.org/0000-0003-3246-3176 "Cevahir Cigla") [Koray Kayabol](https://orcid.org/0000-0003-0053-2800 "Koray Kayabol")
+
+
+
+{% include figure.html image="/assets/paper_pics/tumbnail.png" width="1920" height="1000" %}
+
 
 {% include button.html text="Fork it" icon="github" link="https://github.com/sompt" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %} {% include button.html text="Paper" icon="link" link="https://arxiv.org/abs/2208.02580" color="#0d94e7" %}
 
@@ -19,5 +26,50 @@ Multi-object tracking (MOT) has been dominated by the use of track by detection 
 captured from static cameras located on poles with 6-8 meters in height positioned for city surveillance. This provides a more focused and specific benchmarking of MOT for outdoor surveillance compared to public MOT datasets. We analyze MOT trackers classified as one-shot and two-stage with respect to the way of use of detection and reID networks on
 this new dataset. The experimental results of our new dataset indicate that SOTA is still far from high efficiency, and single-shot trackers are good candidates to unify fast execution and accuracy with competitive performance.
 
-{% include figure.html image="/assets/cam2_anno.png" caption="Image with caption" width="300" height="800" %}
+## Detection & Tracking Datasets
 
+
+{% include figure.html image="/assets/paper_pics/table1_1.png" width="1920" height="1000" %}
+
+{% include figure.html image="/assets/paper_pics/table2_2.png" width="1920" height="1000" %}
+
+## SOMPT22 Statistics
+
+{% include figure.html image="/assets/paper_pics/fig1_3.png" width="1920" height="1000" %}
+
+{% include figure.html image="/assets/paper_pics/table3_4.png" width="1920" height="1000" %}
+
+## Experiment Setup
+
+{% include figure.html image="/assets/paper_pics/table4-5.png" width="1920" height="1000" %}
+
+
+## Benchmark Results
+
+{% include figure.html image="/assets/paper_pics/table6-7.png" width="1920" height="1000" %}
+
+{% include figure.html image="/assets/paper_pics/table8.png" width="1920" height="1000" %}
+
+{% include figure.html image="/assets/paper_pics/table9.png" width="1920" height="1000" %}
+
+{% include figure.html image="/assets/paper_pics/fig2.png" width="1920" height="1000" %}
+
+## Citation
+
+``` js
+@misc{https://doi.org/10.48550/arxiv.2208.02580,
+  doi = {10.48550/ARXIV.2208.02580},
+  url = {https://arxiv.org/abs/2208.02580},
+  author = {Simsek, Fatih Emre and Cigla, Cevahir and Kayabol, Koray},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title = {SOMPT22: A Surveillance Oriented Multi-Pedestrian Tracking Dataset},
+  publisher = {arXiv},
+  year = {2022},
+  copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
+}
+```
+
+
+## License
+
+The annotations of SOMPT22 are licensed under a [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0 "Creative Commons Attribution 4.0 License"). The dataset of SOMPT22 is available for non-commercial research purposes only. All videos and images of DanceTrack are obtained from the Internet. 
