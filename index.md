@@ -1,22 +1,21 @@
 ---
 title: SOMPT22
-feature_text: |
-  ## 
+feature_text: | 
   
 feature_image: "/assets/cam2_anno.png"
 excerpt: "Alembic is a starting point for [Jekyll](https://jekyllrb.com/) projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately. Install it, configure it, tweak it, push it."
 ---
 
-SOMPT22 is a Multi-Object Tracking Dataset. 
+Multi-Object Tracking Dataset. 
 
 [Fatih Emre Simsek](https://www.linkedin.com/in/fatihemresimsek/ "Fatih Emre Simsek")<sup>1,2</sup> [Cevahir Cigla](https://www.linkedin.com/in/cevahir-%C3%A7%C4%B1%C4%9Fla-phd-19236135/ "Cevahir Cigla")<sup>1</sup> [Koray Kayabol](https://www.linkedin.com/in/koray-kayabol-75454045/ "Koray Kayabol")<sup>2</sup>
 
-<sup>1</sup>Aselsan Inc. <sup>2</sup>Gebze Technical University
+<sup>1</sup>[Aselsan Inc.](https://www.linkedin.com/company/aselsan/mycompany/ "Aselsan Inc.") <sup>2</sup>[Gebze Technical University](https://www.linkedin.com/school/gebze-teknik-%C3%BCniversitesi/ "Gebze Technical University") 
 
 {% include figure.html image="/assets/paper_pics/tumbnail.png" width="1920" height="1000" %}
 
 
-{% include button.html text="Fork it" icon="github" link="https://github.com/sompt22" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %} {% include button.html text="Paper" icon="link" link="https://arxiv.org/abs/2208.02580" color="#0d94e7" %}
+{% include button.html text="Fork it" icon="github" link="https://github.com/sompt22" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %} {% include button.html text="Paper" icon="link" link="https://arxiv.org/abs/2208.02580" color="#0d84f7" %}
 
 
 ## Abstract
