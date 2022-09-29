@@ -17,9 +17,6 @@ Multi-Object Tracking Dataset.
 
 {% include button.html text="Fork it" icon="github" link="https://github.com/sompt22" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %} {% include button.html text="Paper" icon="link" link="https://arxiv.org/abs/2208.02580" color="#0d84f7" %}
 
-## Dataset
-
-Google Drive Link: [Dataset](https://drive.google.com/drive/folders/1LWk5Ua03OMxDvIg12fPtZED8UGs_txbJ?usp=sharing)
 
 ## Abstract
 
@@ -27,6 +24,10 @@ Multi-object tracking (MOT) has been dominated by the use of track by detection 
 (reID) of objects while tracking. In this study, we narrow the scope of MOT for surveillance by providing a dedicated dataset of pedestrians and focus on in-depth analyses of well performing multi-object trackers to observe the weak and strong sides of state-of-the-art (SOTA) techniques for real-world applications. For this purpose, we introduce SOMPT22 dataset; a new set for multi person tracking with annotated short videos
 captured from static cameras located on poles with 6-8 meters in height positioned for city surveillance. This provides a more focused and specific benchmarking of MOT for outdoor surveillance compared to public MOT datasets. We analyze MOT trackers classified as one-shot and two-stage with respect to the way of use of detection and reID networks on
 this new dataset. The experimental results of our new dataset indicate that SOTA is still far from high efficiency, and single-shot trackers are good candidates to unify fast execution and accuracy with competitive performance.
+
+## Dataset
+
+Download the dataset from [Google Drive](https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing)
 
 ## Detection & Tracking Datasets
 
