@@ -75,4 +75,4 @@ Download the dataset from [Google Drive](https://drive.google.com/drive/folders/
 
 ## License
 
-The annotations of SOMPT22 are licensed under a [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0 "Creative Commons Attribution 4.0 License"). The dataset of SOMPT22 is available for non-commercial research purposes only. All videos and images of DanceTrack are obtained from the Internet. 
+The annotations of SOMPT22 are licensed under a [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0 "Creative Commons Attribution 4.0 License"). The dataset of SOMPT22 is available for non-commercial research purposes only. All videos and images of SOMPT22 are obtained from the Internet. 
