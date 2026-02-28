@@ -1,0 +1,346 @@
+name: Evaluate Benchmark Submission
+
+on:
+  issues:
+    types: [opened, labeled]
+
+# Only run when issue has 'benchmark-submission' label
+jobs:
+  check-label:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - id: check
+        run: |
+          LABELS='${{ toJson(github.event.issue.labels.*.name) }}'
+          if echo "$LABELS" | grep -q "benchmark-submission"; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          fi
+
+  evaluate:
+    needs: check-label
+    if: needs.check-label.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      # ── 1. Post "evaluation started" comment ──────────────────────────────
+      - name: Comment — evaluation started
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                '## ⚙️ Evaluation Started',
+                '',
+                'Your submission has been received and evaluation is running. ',
+                'Results will be posted here when complete (usually within 5 minutes).',
+                '',
+                `_Triggered by: ${context.actor} · ${new Date().toUTCString()}_`
+              ].join('\n')
+            });
+
+      # ── 2. Checkout site repo ─────────────────────────────────────────────
+      - name: Checkout site repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── 3. Parse issue body ───────────────────────────────────────────────
+      - name: Parse issue body
+        id: parse
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+
+            function extract(label) {
+              // Handles GitHub issue form format: ### Label\n\nvalue
+              const re = new RegExp(`### ${label}\\s*\\n+([^\\n#][^\\n]*)`, 'i');
+              const m = body.match(re);
+              return m ? m[1].trim() : '';
+            }
+
+            const teamName    = extract('Team Name');
+            const trackerName = extract('Tracker Name');
+            const affiliation = extract('Affiliation');
+            const resultsUrl  = extract('Results Download URL');
+            const paperUrl    = extract('Paper / Technical Report URL');
+            const codeUrl     = extract('Code Repository URL');
+            const fps         = extract('Speed \\(FPS\\)');
+            const hardware    = extract('Hardware Used');
+            const description = extract('Method Description');
+
+            core.setOutput('team_name',    teamName);
+            core.setOutput('tracker_name', trackerName);
+            core.setOutput('affiliation',  affiliation);
+            core.setOutput('results_url',  resultsUrl);
+            core.setOutput('paper_url',    paperUrl);
+            core.setOutput('code_url',     codeUrl);
+            core.setOutput('fps',          fps);
+            core.setOutput('hardware',     hardware);
+            core.setOutput('description',  description);
+
+            console.log('Parsed fields:', {teamName, trackerName, affiliation, resultsUrl});
+
+      # ── 4. Validate required fields ───────────────────────────────────────
+      - name: Validate required fields
+        id: validate
+        run: |
+          TEAM="${{ steps.parse.outputs.team_name }}"
+          TRACKER="${{ steps.parse.outputs.tracker_name }}"
+          URL="${{ steps.parse.outputs.results_url }}"
+
+          if [ -z "$TEAM" ] || [ -z "$TRACKER" ] || [ -z "$URL" ]; then
+            echo "valid=false" >> $GITHUB_OUTPUT
+            echo "error=Missing required fields: team_name='$TEAM' tracker='$TRACKER' url='$URL'" >> $GITHUB_OUTPUT
+          else
+            echo "valid=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment — validation failed
+        if: steps.validate.outputs.valid == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                '## ❌ Validation Failed',
+                '',
+                'Could not parse required fields from your submission. Please ensure you used the submission template and filled in:',
+                '- Team Name',
+                '- Tracker Name',
+                '- Results Download URL',
+                '',
+                `Error: \`${{ steps.validate.outputs.error }}\``,
+                '',
+                'Please close this issue and open a new one using the [submission template](/issues/new?template=submission.yml).'
+              ].join('\n')
+            });
+            core.setFailed('Validation failed');
+
+      # ── 5. Set up Python ──────────────────────────────────────────────────
+      - name: Set up Python
+        if: steps.validate.outputs.valid == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        if: steps.validate.outputs.valid == 'true'
+        run: |
+          pip install trackeval motmetrics numpy scipy
+
+      # ── 6. Download ground truth from private repo ────────────────────────
+      - name: Download GT from private repo
+        if: steps.validate.outputs.valid == 'true'
+        env:
+          GT_REPO_TOKEN: ${{ secrets.GT_REPO_TOKEN }}
+          GT_REPO: ${{ secrets.GT_REPO }}   # e.g. "sompt22/sompt22-gt-private"
+        run: |
+          git clone https://x-access-token:${GT_REPO_TOKEN}@github.com/${GT_REPO}.git gt_repo
+          echo "GT downloaded successfully"
+          ls gt_repo/
+
+      # ── 7. Download submission results ────────────────────────────────────
+      - name: Download submission results
+        if: steps.validate.outputs.valid == 'true'
+        run: |
+          mkdir -p submission_results
+          RESULTS_URL="${{ steps.parse.outputs.results_url }}"
+
+          # Handle Google Drive share links → convert to direct download
+          if echo "$RESULTS_URL" | grep -q "drive.google.com/file/d/"; then
+            FILE_ID=$(echo "$RESULTS_URL" | sed 's/.*\/d\/\([^\/]*\).*/\1/')
+            RESULTS_URL="https://drive.google.com/uc?export=download&id=${FILE_ID}"
+          fi
+          if echo "$RESULTS_URL" | grep -q "drive.google.com/open\?id="; then
+            FILE_ID=$(echo "$RESULTS_URL" | sed 's/.*id=\([^&]*\).*/\1/')
+            RESULTS_URL="https://drive.google.com/uc?export=download&id=${FILE_ID}"
+          fi
+
+          echo "Downloading from: $RESULTS_URL"
+          wget -q -O submission.zip "$RESULTS_URL" || \
+            curl -L -o submission.zip "$RESULTS_URL"
+
+          unzip -q submission.zip -d submission_results/
+          echo "Files in submission:"
+          ls submission_results/ || true
+          find submission_results/ -name "*.txt" | head -20
+
+      # ── 8. Run evaluation ─────────────────────────────────────────────────
+      - name: Run TrackEval evaluation
+        if: steps.validate.outputs.valid == 'true'
+        id: eval
+        run: |
+          python scripts/evaluate_submission.py \
+            --gt_dir     gt_repo/test \
+            --pred_dir   submission_results \
+            --output     eval_results.json
+          cat eval_results.json
+
+      # ── 9. Post results comment ───────────────────────────────────────────
+      - name: Post evaluation results
+        if: steps.validate.outputs.valid == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('eval_results.json', 'utf8'));
+
+            if (results.error) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: [
+                  '## ❌ Evaluation Error',
+                  '',
+                  'An error occurred during evaluation:',
+                  '```',
+                  results.error,
+                  '```',
+                  '',
+                  'Please check your result files and resubmit.'
+                ].join('\n')
+              });
+              core.setFailed(results.error);
+              return;
+            }
+
+            const r = results;
+            const table = [
+              '| Metric | Value |',
+              '|--------|-------|',
+              `| **HOTA** | **${r.hota.toFixed(2)}** |`,
+              `| DetA | ${r.deta.toFixed(2)} |`,
+              `| AssA | ${r.assa.toFixed(2)} |`,
+              `| MOTA | ${r.mota.toFixed(2)} |`,
+              `| IDF1 | ${r.idf1.toFixed(2)} |`,
+              `| FP   | ${r.fp} |`,
+              `| FN   | ${r.fn} |`,
+              `| ID Switches | ${r.ids} |`,
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                '## ✅ Evaluation Complete',
+                '',
+                `**Team:** ${{ steps.parse.outputs.team_name }}  `,
+                `**Tracker:** ${{ steps.parse.outputs.tracker_name }}`,
+                '',
+                table,
+                '',
+                '_Leaderboard will be updated shortly. Rankings are sorted by HOTA._'
+              ].join('\n')
+            });
+
+            // Store outputs for leaderboard update step
+            core.exportVariable('EVAL_HOTA', r.hota);
+            core.exportVariable('EVAL_DETA', r.deta);
+            core.exportVariable('EVAL_ASSA', r.assa);
+            core.exportVariable('EVAL_MOTA', r.mota);
+            core.exportVariable('EVAL_IDF1', r.idf1);
+            core.exportVariable('EVAL_FP',   r.fp);
+            core.exportVariable('EVAL_FN',   r.fn);
+            core.exportVariable('EVAL_IDS',  r.ids);
+
+      # ── 10. Update leaderboard.json ───────────────────────────────────────
+      - name: Update leaderboard
+        if: steps.validate.outputs.valid == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('eval_results.json', 'utf8'));
+            if (results.error) return;
+
+            const today = new Date().toISOString().split('T')[0];
+            const newEntry = {
+              rank: 0,
+              team:        '${{ steps.parse.outputs.team_name }}',
+              tracker:     '${{ steps.parse.outputs.tracker_name }}',
+              affiliation: '${{ steps.parse.outputs.affiliation }}',
+              paper:       '${{ steps.parse.outputs.paper_url }}',
+              code:        '${{ steps.parse.outputs.code_url }}',
+              hota:  results.hota,
+              deta:  results.deta,
+              assa:  results.assa,
+              mota:  results.mota,
+              idf1:  results.idf1,
+              fp:    results.fp,
+              fn:    results.fn,
+              ids:   results.ids,
+              fps:   parseFloat('${{ steps.parse.outputs.fps }}') || 0,
+              date:  today,
+              issue: context.issue.number
+            };
+
+            let leaderboard = JSON.parse(
+              fs.readFileSync('_data/leaderboard.json', 'utf8')
+            );
+
+            // Remove old entry from same team+tracker if exists
+            leaderboard = leaderboard.filter(e =>
+              !(e.team === newEntry.team && e.tracker === newEntry.tracker)
+            );
+
+            leaderboard.push(newEntry);
+
+            // Sort by HOTA descending, update ranks
+            leaderboard.sort((a, b) => b.hota - a.hota);
+            leaderboard.forEach((e, i) => { e.rank = i + 1; });
+
+            fs.writeFileSync(
+              '_data/leaderboard.json',
+              JSON.stringify(leaderboard, null, 2)
+            );
+            console.log('Leaderboard updated:', leaderboard.length, 'entries');
+
+      # ── 11. Commit and push leaderboard ───────────────────────────────────
+      - name: Commit leaderboard update
+        if: steps.validate.outputs.valid == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add _data/leaderboard.json
+          git diff --cached --quiet || git commit -m "leaderboard: add ${{ steps.parse.outputs.team_name }} - ${{ steps.parse.outputs.tracker_name }} (issue #${{ github.event.issue.number }})"
+          git push origin HEAD
+
+      # ── 12. Close issue and add accepted label ─────────────────────────────
+      - name: Label and close issue
+        if: steps.validate.outputs.valid == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Ensure 'accepted' label exists
+            try {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'accepted',
+                color: '28a745'
+              });
+            } catch(e) { /* label may already exist */ }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['accepted']
+            });

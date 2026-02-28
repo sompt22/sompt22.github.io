@@ -1,0 +1,120 @@
+name: Benchmark Submission
+description: Submit your tracking results for evaluation on the SOMPT22 test set
+title: "[SUBMISSION] <Team> - <Tracker Name>"
+labels: ["benchmark-submission"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## SOMPT22 Benchmark Submission
+        Please fill in all fields carefully. Your results will be evaluated automatically.
+        Make sure your results zip is publicly accessible before submitting.
+
+  - type: input
+    id: team_name
+    attributes:
+      label: Team Name
+      description: Your team or organization name (will appear on the leaderboard)
+      placeholder: "e.g. VisionLab @ MyUniversity"
+    validations:
+      required: true
+
+  - type: input
+    id: tracker_name
+    attributes:
+      label: Tracker Name
+      description: Name of your tracker / method
+      placeholder: "e.g. SuperTracker v2"
+    validations:
+      required: true
+
+  - type: input
+    id: affiliation
+    attributes:
+      label: Affiliation
+      description: University, company, or research lab
+      placeholder: "e.g. MIT CSAIL"
+    validations:
+      required: true
+
+  - type: input
+    id: results_url
+    attributes:
+      label: Results Download URL
+      description: |
+        Public download link to your results `.zip` file.
+        Accepted: Google Drive (direct download), Dropbox, GitHub Releases, OneDrive, etc.
+        The zip must contain one `.txt` file per test sequence in MOT Challenge format.
+      placeholder: "https://drive.google.com/..."
+    validations:
+      required: true
+
+  - type: input
+    id: paper_url
+    attributes:
+      label: Paper / Technical Report URL
+      description: Link to your paper, arXiv preprint, or technical report (optional but required for top-3)
+      placeholder: "https://arxiv.org/abs/..."
+    validations:
+      required: false
+
+  - type: input
+    id: code_url
+    attributes:
+      label: Code Repository URL
+      description: Link to your code (GitHub, GitLab, etc.)
+      placeholder: "https://github.com/..."
+    validations:
+      required: false
+
+  - type: input
+    id: fps
+    attributes:
+      label: Speed (FPS)
+      description: Frames per second on your hardware
+      placeholder: "e.g. 25.3"
+    validations:
+      required: true
+
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware Used
+      description: GPU model used for speed measurement
+      placeholder: "e.g. NVIDIA RTX 3090"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: external_data
+    attributes:
+      label: External Training Data
+      description: Did you use any training data beyond the SOMPT22 training set and standard public datasets (COCO, MOT17, etc.)?
+      options:
+        - "No — only public datasets"
+        - "Yes — private or proprietary data used (describe in notes)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: method_description
+    attributes:
+      label: Method Description
+      description: Brief description of your approach (2–5 sentences). Will be shown on the leaderboard if accepted.
+      placeholder: "Describe your detection backbone, association strategy, re-ID model, etc."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: rules_agreement
+    attributes:
+      label: Rules Agreement
+      options:
+        - label: I confirm I have **not** used test ground-truth labels in any way.
+          required: true
+        - label: I agree to the [challenge rules](/challenge/#rules).
+          required: true
+        - label: The results zip contains one `.txt` file per sequence in MOT Challenge format.
+          required: true

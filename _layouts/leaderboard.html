@@ -1,0 +1,19 @@
+---
+layout: default
+---
+
+{% include site-header.html %}
+
+{% if page.feature_image or page.feature_text %}
+  {% capture feature_image %}{% if page.feature_image %}{{ page.feature_image }}{% endif %}{% endcapture %}
+  {% capture feature_text %}{% if page.feature_text %}{{ page.feature_text }}{% endif %}{% endcapture %}
+  {% include site-feature.html feature_image=feature_image feature_text=feature_text %}
+{% endif %}
+
+<main class="main container" style="max-width: 1200px;">
+  <article class="article content typeset">
+    {{ content }}
+  </article>
+</main>
+
+{% include site-footer.html %}
