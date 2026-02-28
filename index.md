@@ -1,22 +1,19 @@
 ---
 title: SOMPT22
-feature_text: | 
-  
+feature_text: |
+  ## SOMPT22
+  A Surveillance Oriented Multi-Pedestrian Tracking Dataset
 feature_image: "/assets/cam2_anno.png"
-excerpt: "Alembic is a starting point for [Jekyll](https://jekyllrb.com/) projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately. Install it, configure it, tweak it, push it."
+excerpt: "SOMPT22 is a multi-pedestrian tracking dataset captured from static surveillance cameras. It provides dedicated benchmarking for outdoor city surveillance scenarios."
 ---
 
-Multi-Object Tracking Dataset. 
+[Fatih Emre Simsek](https://www.linkedin.com/in/fatihemresimsek/ "Fatih Emre Simsek")<sup>1,2</sup> &nbsp; [Cevahir Cigla](https://www.linkedin.com/in/cevahir-%C3%A7%C4%B1%C4%9Fla-phd-19236135/ "Cevahir Cigla")<sup>1</sup> &nbsp; [Koray Kayabol](https://www.linkedin.com/in/koray-kayabol-75454045/ "Koray Kayabol")<sup>2</sup>
 
-[Fatih Emre Simsek](https://www.linkedin.com/in/fatihemresimsek/ "Fatih Emre Simsek")<sup>1,2</sup> [Cevahir Cigla](https://www.linkedin.com/in/cevahir-%C3%A7%C4%B1%C4%9Fla-phd-19236135/ "Cevahir Cigla")<sup>1</sup> [Koray Kayabol](https://www.linkedin.com/in/koray-kayabol-75454045/ "Koray Kayabol")<sup>2</sup>
-
-<sup>1</sup>[Aselsan Inc.](https://www.linkedin.com/company/aselsan/mycompany/ "Aselsan Inc.") <sup>2</sup>[Gebze Technical University](https://www.linkedin.com/school/gebze-teknik-%C3%BCniversitesi/ "Gebze Technical University") 
+<sup>1</sup>[Aselsan Inc.](https://www.linkedin.com/company/aselsan/mycompany/ "Aselsan Inc.") &nbsp; <sup>2</sup>[Gebze Technical University](https://www.linkedin.com/school/gebze-teknik-%C3%BCniversitesi/ "Gebze Technical University")
 
 {% include figure.html image="/assets/paper_pics/tumbnail.png" width="1920" height="1000" %}
 
-
-{% include button.html text="Fork it" icon="github" link="https://github.com/sompt22" color="#0366d6" %} {% include button.html text="Tweet it" icon="twitter" link="https://twitter.com/" color="#0d94e7" %} {% include button.html text="Paper" icon="link" link="https://arxiv.org/abs/2208.02580" color="#0d84f7" %}
-
+{% include button.html text="Paper" icon="link" link="https://arxiv.org/abs/2208.02580" color="#0d84f7" %} {% include button.html text="Download Dataset" icon="link" link="https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing" color="#28a745" %} {% include button.html text="Leaderboard" icon="link" link="/leaderboard/" color="#e36209" %} {% include button.html text="Submit Results" icon="link" link="/challenge/" color="#6f42c1" %} {% include button.html text="GitHub" icon="github" link="https://github.com/sompt22" color="#0366d6" %}
 
 ## Abstract
 
@@ -25,12 +22,20 @@ Multi-object tracking (MOT) has been dominated by the use of track by detection 
 captured from static cameras located on poles with 6-8 meters in height positioned for city surveillance. This provides a more focused and specific benchmarking of MOT for outdoor surveillance compared to public MOT datasets. We analyze MOT trackers classified as one-shot and two-stage with respect to the way of use of detection and reID networks on
 this new dataset. The experimental results of our new dataset indicate that SOTA is still far from high efficiency, and single-shot trackers are good candidates to unify fast execution and accuracy with competitive performance.
 
+## Benchmark Challenge
+
+We host an open benchmark challenge for multi-pedestrian tracking on the SOMPT22 test set.
+Submit your tracker's results and get your scores computed automatically — rankings are updated live.
+
+{% include button.html text="View Leaderboard" icon="link" link="/leaderboard/" color="#e36209" %} {% include button.html text="How to Submit" icon="link" link="/challenge/" color="#6f42c1" %}
+
 ## Dataset
 
-Download the dataset from [Google Drive](https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing)
+Training set videos and annotations are publicly available. The test set (images only, no GT) is used for the benchmark challenge.
+
+{% include button.html text="Download Training Set" icon="link" link="https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing" color="#28a745" %}
 
 ## Detection & Tracking Datasets
-
 
 {% include figure.html image="/assets/paper_pics/table1_1.png" width="1920" height="1000" %}
 
@@ -46,7 +51,6 @@ Download the dataset from [Google Drive](https://drive.google.com/drive/folders/
 
 {% include figure.html image="/assets/paper_pics/table4-5.png" width="1920" height="1000" %}
 
-
 ## Benchmark Results
 
 {% include figure.html image="/assets/paper_pics/table6-7.png" width="1920" height="1000" %}
@@ -59,20 +63,18 @@ Download the dataset from [Google Drive](https://drive.google.com/drive/folders/
 
 ## Citation
 
-``` js
-@misc{https://doi.org/10.48550/arxiv.2208.02580,
-  doi = {10.48550/ARXIV.2208.02580},
-  url = {https://arxiv.org/abs/2208.02580},
-  author = {Simsek, Fatih Emre and Cigla, Cevahir and Kayabol, Koray},
-  keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences},
-  title = {SOMPT22: A Surveillance Oriented Multi-Pedestrian Tracking Dataset},
+```bibtex
+@misc{simsek2022sompt22,
+  doi       = {10.48550/ARXIV.2208.02580},
+  url       = {https://arxiv.org/abs/2208.02580},
+  author    = {Simsek, Fatih Emre and Cigla, Cevahir and Kayabol, Koray},
+  title     = {SOMPT22: A Surveillance Oriented Multi-Pedestrian Tracking Dataset},
   publisher = {arXiv},
-  year = {2022},
+  year      = {2022},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 ```
 
-
 ## License
 
-The annotations of SOMPT22 are licensed under a [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0 "Creative Commons Attribution 4.0 License"). The dataset of SOMPT22 is available for non-commercial research purposes only. All videos and images of SOMPT22 are obtained from the Internet. 
+The annotations of SOMPT22 are licensed under a [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0 "Creative Commons Attribution 4.0 License"). The dataset of SOMPT22 is available for non-commercial research purposes only. All videos and images of SOMPT22 are obtained from the Internet.
