@@ -138,10 +138,12 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
 
-      - name: Install dependencies
+      - name: Install TrackEval and dependencies
         if: steps.validate.outputs.valid == 'true'
         run: |
-          pip install trackeval motmetrics numpy scipy
+          # Install latest TrackEval directly from GitHub
+          pip install git+https://github.com/JonathonLuiten/TrackEval.git
+          pip install numpy scipy
 
       # ── 6. Download ground truth from private repo ────────────────────────
       - name: Download GT from private repo

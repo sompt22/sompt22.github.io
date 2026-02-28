@@ -127,14 +127,18 @@ Site available at `http://localhost:4000`.
 
 ## Evaluation Script
 
-`scripts/evaluate_submission.py` supports two backends (auto-detected):
+`scripts/evaluate_submission.py` uses [TrackEval](https://github.com/JonathonLuiten/TrackEval)
+(latest version, installed from GitHub source).
 
-| Backend | Metrics |
-|---------|---------|
-| [TrackEval](https://github.com/JonathonLuiten/TrackEval) | Full HOTA, DetA, AssA, MOTA, IDF1 |
-| [py-motmetrics](https://github.com/cheind/py-motmetrics) | MOTA, IDF1, FP, FN, IDs (HOTA approximated) |
+| Metric group | Metrics |
+|---|---|
+| HOTA | HOTA, DetA, AssA (mean over α = 0.05 … 0.95) + per-alpha values |
+| CLEAR | MOTA, MOTP |
+| Identity | IDF1, IDP, IDR |
+| Counts | FP, FN, IDSW, MT, ML |
 
-TrackEval is preferred and installed first by the Actions workflow.
+TrackEval's built-in preprocessor filters distractor annotations (`conf=0` in GT)
+before computing metrics, consistent with the MOT Challenge evaluation protocol.
 
 ```bash
 python scripts/evaluate_submission.py \
