@@ -1,97 +1,50 @@
-# SOMPT22 — Benchmark Website
+# SOMPT22: A Surveillance Oriented Multi-Pedestrian Tracking Dataset
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-live-brightgreen)](https://sompt22.github.io)
+[![Website](https://img.shields.io/badge/Website-sompt22.github.io-blue)](https://sompt22.github.io)
+[![Challenge](https://img.shields.io/badge/Benchmark-Challenge-orange)](https://sompt22.github.io/challenge/)
+[![Leaderboard](https://img.shields.io/badge/Leaderboard-live-green)](https://sompt22.github.io/leaderboard/)
+[![Paper](https://img.shields.io/badge/arXiv-2208.02580-red)](https://arxiv.org/abs/2208.02580)
 
-Website and automated benchmark challenge platform for the **SOMPT22: A Surveillance Oriented Multi-Pedestrian Tracking Dataset**.
+**Fatih Emre Simsek**<sup>1,2</sup> · **Cevahir Cigla**<sup>1</sup> · **Koray Kayabol**<sup>2</sup>
 
-> Simsek, F.E., Cigla, C., Kayabol, K. — [arXiv:2208.02580](https://arxiv.org/abs/2208.02580)
-
----
-
-## Site Structure
-
-| Page | URL | Description |
-|------|-----|-------------|
-| Home | `/` | Dataset overview, paper, statistics |
-| Challenge | `/challenge/` | Submission guide, format, rules |
-| Leaderboard | `/leaderboard/` | Live rankings, sortable by any metric |
-| Blog | `/blog/` | News and updates |
+<sup>1</sup> Aselsan Inc. · <sup>2</sup> Gebze Technical University
 
 ---
 
-## Benchmark Challenge System
+## Overview
 
-Participants submit tracking results via GitHub Issues. Evaluation is fully automated via GitHub Actions.
+SOMPT22 is a multi-pedestrian tracking dataset captured from **static surveillance cameras** in outdoor city environments. It provides dedicated benchmarking for surveillance-focused MOT scenarios, complementing general-purpose datasets like MOT17/MOT20.
 
-### How It Works
-
-```
-Participant opens a GitHub Issue (Benchmark Submission template)
-        │
-        ▼
-GitHub Actions workflow triggers (evaluate_submission.yml)
-        │
-        ├── Parses issue body (team, tracker, results URL, FPS, ...)
-        ├── Downloads results .zip from participant's public link
-        ├── Clones private GT repo (via GT_REPO_TOKEN secret)
-        ├── Runs evaluate_submission.py (TrackEval / motmetrics)
-        │       └── Computes: HOTA, DetA, AssA, MOTA, IDF1, FP, FN, IDs
-        ├── Posts results table as a comment on the issue
-        ├── Updates _data/leaderboard.json and commits to main
-        └── Labels issue as "accepted"
-```
-
-### Key Files
-
-```
-.github/
-├── ISSUE_TEMPLATE/
-│   └── submission.yml          ← structured submission form
-└── workflows/
-    └── evaluate_submission.yml ← evaluation pipeline
-
-scripts/
-└── evaluate_submission.py      ← Python evaluation script (HOTA/MOTA/IDF1)
-
-_data/
-└── leaderboard.json            ← auto-updated leaderboard data
-
-leaderboard.md                  ← leaderboard page (reads leaderboard.json)
-challenge.md                    ← challenge instructions page
-_layouts/leaderboard.html       ← wide layout for leaderboard table
-```
+Key characteristics:
+- Static cameras mounted at 6–8 m height on poles
+- Outdoor urban scenes with varying crowd densities
+- Annotated with pedestrian bounding boxes and track IDs
+- Separate training set (with GT) and test set (images only, for benchmarking)
 
 ---
 
-## Setup: Required GitHub Secrets
+## Download
 
-Go to **Settings → Secrets and variables → Actions** and add:
-
-| Secret | Description |
-|--------|-------------|
-| `GT_REPO_TOKEN` | Personal Access Token with `repo` scope for the private GT repository |
-| `GT_REPO` | Private repo containing test GT, e.g. `sompt22/sompt22-gt-private` |
-
-### Private GT Repository Structure
-
-The GT repository must follow the MOT Challenge directory layout:
-
-```
-test/
-├── SOMPT22-01/
-│   └── gt/
-│       └── gt.txt
-├── SOMPT22-02/
-│   └── gt/
-│       └── gt.txt
-└── ...
-```
+| Split | Contents | Link |
+|-------|----------|------|
+| Training set | Videos + annotations (GT) | [Google Drive](https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing) |
+| Test set | Images only (no GT) | [Google Drive](https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing) |
 
 ---
 
-## Submission Format
+## Benchmark Challenge
 
-Results must be in **MOT Challenge format** — one `.txt` file per test sequence:
+We host an **open benchmark** for multi-pedestrian tracking on the SOMPT22 test set.
+
+- Submit your tracker's results and get scores computed automatically
+- Metrics: HOTA, DetA, AssA, MOTA, IDF1
+- Rankings updated live on the [Leaderboard](https://sompt22.github.io/leaderboard/)
+
+**[How to Submit →](https://sompt22.github.io/challenge/)**
+
+### Submission Format
+
+Results must follow the **MOT Challenge format** — one `.txt` file per test sequence:
 
 ```
 # frame, id, bb_left, bb_top, bb_width, bb_height, conf, x, y, z
@@ -99,53 +52,7 @@ Results must be in **MOT Challenge format** — one `.txt` file per test sequenc
 1, 2, 731, 392, 55, 143, 1, -1, -1, -1
 ```
 
-Participants zip the result files and upload to a public host (Google Drive, Dropbox, etc.), then open a [Benchmark Submission issue](../../issues/new?template=submission.yml).
-
----
-
-## Leaderboard
-
-Rankings are sorted by **HOTA** (primary metric). The leaderboard table supports:
-- Column sorting (click any header)
-- Live search by team / tracker / affiliation
-- Gold / silver / bronze row highlighting for top-3
-
-`_data/leaderboard.json` is committed automatically after each accepted submission. Jekyll rebuilds the static site on every push.
-
----
-
-## Local Development
-
-```bash
-bundle install
-bundle exec jekyll serve
-```
-
-Site available at `http://localhost:4000`.
-
----
-
-## Evaluation Script
-
-`scripts/evaluate_submission.py` uses [TrackEval](https://github.com/JonathonLuiten/TrackEval)
-(latest version, installed from GitHub source).
-
-| Metric group | Metrics |
-|---|---|
-| HOTA | HOTA, DetA, AssA (mean over α = 0.05 … 0.95) + per-alpha values |
-| CLEAR | MOTA, MOTP |
-| Identity | IDF1, IDP, IDR |
-| Counts | FP, FN, IDSW, MT, ML |
-
-TrackEval's built-in preprocessor filters distractor annotations (`conf=0` in GT)
-before computing metrics, consistent with the MOT Challenge evaluation protocol.
-
-```bash
-python scripts/evaluate_submission.py \
-    --gt_dir   /path/to/test_gt \
-    --pred_dir /path/to/results \
-    --output   eval_results.json
-```
+Zip your result files and follow the steps at [sompt22.github.io/challenge](https://sompt22.github.io/challenge/).
 
 ---
 
@@ -153,11 +60,13 @@ python scripts/evaluate_submission.py \
 
 ```bibtex
 @misc{simsek2022sompt22,
-  doi    = {10.48550/ARXIV.2208.02580},
-  url    = {https://arxiv.org/abs/2208.02580},
-  author = {Simsek, Fatih Emre and Cigla, Cevahir and Kayabol, Koray},
-  title  = {SOMPT22: A Surveillance Oriented Multi-Pedestrian Tracking Dataset},
-  year   = {2022}
+  doi       = {10.48550/ARXIV.2208.02580},
+  url       = {https://arxiv.org/abs/2208.02580},
+  author    = {Simsek, Fatih Emre and Cigla, Cevahir and Kayabol, Koray},
+  title     = {SOMPT22: A Surveillance Oriented Multi-Pedestrian Tracking Dataset},
+  publisher = {arXiv},
+  year      = {2022},
+  copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 ```
 
@@ -166,5 +75,4 @@ python scripts/evaluate_submission.py \
 ## License
 
 Dataset annotations: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0).
-Dataset videos: available for non-commercial research only.
-Website code: MIT.
+Dataset videos: available for non-commercial research purposes only.
