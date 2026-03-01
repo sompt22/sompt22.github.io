@@ -89,33 +89,6 @@ layout: page
   margin: 1rem 0;
   border-radius: 0 4px 4px 0;
 }
-.btn-submit,
-a.btn-submit,
-.typeset a.btn-submit,
-p a.btn-submit,
-li a.btn-submit {
-  display: inline-block;
-  background: #0d84f7 !important;
-  background-image: none !important;
-  color: white !important;
-  padding: 0.75rem 2rem;
-  border-radius: 6px;
-  font-weight: 600;
-  text-decoration: none !important;
-  text-shadow: none !important;
-  margin: 0.5rem 0;
-  font-size: 1rem;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-.btn-submit:hover,
-a.btn-submit:hover {
-  background: #0a6cc9 !important;
-  background-image: none !important;
-  color: white !important;
-  text-decoration: none !important;
-  text-shadow: none !important;
-}
 </style>
 
 ## Overview
@@ -225,9 +198,7 @@ Use the sequence list provided in the test set README.
   <li><div><strong>Leaderboard update</strong>: accepted submissions are added to the leaderboard automatically.</div></li>
 </ol>
 
-<a class="btn-submit" href="https://github.com/sompt22/sompt22.github.io/issues/new?template=submission.yml" target="_blank">
-  Open Submission Issue →
-</a>
+{% include button.html text="Open Submission Issue" icon="link" link="https://github.com/sompt22/sompt22.github.io/issues/new?template=submission.yml" color="#0d84f7" %}
 
 ---
 
