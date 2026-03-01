@@ -2,27 +2,10 @@ name: Evaluate Benchmark Submission
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened]
 
-# Only run when issue has 'benchmark-submission' label
 jobs:
-  check-label:
-    runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-    steps:
-      - id: check
-        run: |
-          LABELS='${{ toJson(github.event.issue.labels.*.name) }}'
-          if echo "$LABELS" | grep -q "benchmark-submission"; then
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          else
-            echo "should_run=false" >> $GITHUB_OUTPUT
-          fi
-
   evaluate:
-    needs: check-label
-    if: needs.check-label.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
