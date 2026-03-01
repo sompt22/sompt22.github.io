@@ -8,6 +8,25 @@ layout: page
 ---
 
 <style>
+/* Feature image overlay for text readability */
+.feature {
+  position: relative;
+}
+.feature::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+.feature .container {
+  position: relative;
+  z-index: 1;
+}
+.feature h2, .feature p {
+  color: white !important;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+
 .challenge-section {
   background: #f8f9fa;
   border-left: 4px solid #0d84f7;
@@ -70,7 +89,9 @@ layout: page
   margin: 1rem 0;
   border-radius: 0 4px 4px 0;
 }
-.btn-submit {
+.btn-submit,
+a.btn-submit,
+.typeset a.btn-submit {
   display: inline-block;
   background: #0d84f7;
   color: white !important;
@@ -80,8 +101,15 @@ layout: page
   text-decoration: none !important;
   margin: 0.5rem 0;
   font-size: 1rem;
+  border-bottom: none !important;
+  box-shadow: none !important;
 }
-.btn-submit:hover { background: #0a6cc9; }
+.btn-submit:hover,
+a.btn-submit:hover {
+  background: #0a6cc9;
+  color: white !important;
+  text-decoration: none !important;
+}
 </style>
 
 ## Overview

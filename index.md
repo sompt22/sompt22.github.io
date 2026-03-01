@@ -7,6 +7,18 @@ feature_image: "/assets/cam2_anno.png"
 excerpt: "SOMPT22 is a multi-pedestrian tracking dataset captured from static surveillance cameras. It provides dedicated benchmarking for outdoor city surveillance scenarios."
 ---
 
+<style>
+.feature { position: relative; }
+.feature::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+.feature .container { position: relative; z-index: 1; }
+.feature h2, .feature p { color: white !important; text-shadow: 0 2px 6px rgba(0,0,0,0.7); }
+</style>
+
 [Fatih Emre Simsek](https://www.linkedin.com/in/fatihemresimsek/ "Fatih Emre Simsek")<sup>1,2</sup> &nbsp; [Cevahir Cigla](https://www.linkedin.com/in/cevahir-%C3%A7%C4%B1%C4%9Fla-phd-19236135/ "Cevahir Cigla")<sup>1</sup> &nbsp; [Koray Kayabol](https://www.linkedin.com/in/koray-kayabol-75454045/ "Koray Kayabol")<sup>2</sup>
 
 <sup>1</sup>[Aselsan Inc.](https://www.linkedin.com/company/aselsan/mycompany/ "Aselsan Inc.") &nbsp; <sup>2</sup>[Gebze Technical University](https://www.linkedin.com/school/gebze-teknik-%C3%BCniversitesi/ "Gebze Technical University")
