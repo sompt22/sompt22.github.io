@@ -105,21 +105,16 @@ The SOMPT22 Benchmark Challenge is an open competition for multi-pedestrian trac
 ## Datasets
 
 <div class="challenge-section">
-<h3>Training Set (public)</h3>
+<h3>Dataset Download (Training + Test)</h3>
 <p>
-  Videos and ground-truth annotations are publicly available for download.
-  Use the training set to develop and tune your tracker.
+  The dataset is distributed as a single archive containing two splits:
 </p>
-{% include button.html text="Download Training Set" icon="link" link="https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing" color="#0d84f7" %}
-</div>
-
-<div class="challenge-section">
-<h3>Test Set (images only — no GT)</h3>
-<p>
-  The test set contains only video frames. Ground-truth annotations are held privately
-  for evaluation. Download the test set, run your tracker, and submit results.
-</p>
-{% include button.html text="Download Test Set" icon="link" link="https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing" color="#28a745" %}
+<ul>
+  <li><strong>Training set</strong> — video frames and ground-truth annotations. Use this to develop and tune your tracker.</li>
+  <li><strong>Test set</strong> — video frames only (no GT). Run your tracker on this split and submit the results for evaluation.</li>
+</ul>
+<p>Test ground-truth annotations are held privately and used only for automated evaluation.</p>
+{% include button.html text="Download Dataset" icon="link" link="https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing" color="#28a745" %}
 </div>
 
 ---

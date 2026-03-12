@@ -43,9 +43,9 @@ Submit your tracker's results and get your scores computed automatically — ran
 
 ## Dataset
 
-Training set videos and annotations are publicly available. The test set (images only, no GT) is used for the benchmark challenge.
+The dataset is distributed as a single archive containing two splits: **training** (with ground-truth annotations) and **test** (images only, no GT). The test GT is held privately for benchmark evaluation.
 
-{% include button.html text="Download Training Set" icon="link" link="https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing" color="#28a745" %}
+{% include button.html text="Download Dataset" icon="link" link="https://drive.google.com/drive/folders/1Z_gnFmX-EKUe4yLBQPa2pxXkyqYbxkhX?usp=sharing" color="#28a745" %}
 
 ## Detection & Tracking Datasets
 
