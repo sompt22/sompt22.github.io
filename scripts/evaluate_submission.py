@@ -54,7 +54,23 @@ import trackeval
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def get_seq_length(gt_txt_path: str) -> int:
-    """Return the maximum frame index found in a GT file."""
+    """Return sequence length from seqinfo.ini if present, else max frame in GT.
+
+    Reading seqinfo.ini is preferred because GT files may not have annotations
+    on every frame (e.g. empty final frames), which would cause max-frame to
+    undercount and TrackEval to skip those frames during evaluation.
+    """
+    seqinfo_path = os.path.join(os.path.dirname(gt_txt_path), '..', 'seqinfo.ini')
+    seqinfo_path = os.path.normpath(seqinfo_path)
+    if os.path.isfile(seqinfo_path):
+        with open(seqinfo_path) as f:
+            for line in f:
+                if line.lower().startswith('seqlength'):
+                    try:
+                        return int(line.split('=')[1].strip())
+                    except (ValueError, IndexError):
+                        break
+
     max_frame = 0
     with open(gt_txt_path) as f:
         for line in f:
@@ -70,11 +86,16 @@ def get_seq_length(gt_txt_path: str) -> int:
 
 
 def find_pred_file(pred_dir: str, seq_name: str) -> str | None:
-    """Walk pred_dir tree and return the path to <seq_name>.txt, or None."""
-    target = f"{seq_name}.txt"
+    """Walk pred_dir tree and return the path to <seq_name>.txt, or None.
+
+    Matching is case-insensitive so submissions like 'sompt22-01.txt' are
+    accepted alongside the canonical 'SOMPT22-01.txt'.
+    """
+    target = f"{seq_name}.txt".lower()
     for root, _dirs, files in os.walk(pred_dir):
-        if target in files:
-            return os.path.join(root, target)
+        for fname in files:
+            if fname.lower() == target:
+                return os.path.join(root, fname)
     return None
 
 
@@ -120,6 +141,8 @@ def evaluate(gt_split_dir: str, pred_dir: str) -> dict:
     tracker_root     = '/tmp/te_trackers'
     tracker_sub_fol  = 'data'
     tracker_data_dir = os.path.join(tracker_root, 'submission', tracker_sub_fol)
+    # Always start clean so stale files from a previous run don't contaminate results.
+    shutil.rmtree(tracker_root, ignore_errors=True)
     os.makedirs(tracker_data_dir, exist_ok=True)
 
     missing = []
@@ -135,6 +158,11 @@ def evaluate(gt_split_dir: str, pred_dir: str) -> dict:
     if missing:
         print(f"WARNING: No prediction found for {len(missing)} sequence(s): {missing}",
               file=sys.stderr)
+
+    if len(missing) == len(sequences):
+        return {"error": "No prediction files matched any GT sequence. "
+                         "Ensure file names match sequence names (e.g. SOMPT22-01.txt).",
+                "sequences_missing": missing}
 
     # ── TrackEval config ───────────────────────────────────────────────────
     eval_config = {
